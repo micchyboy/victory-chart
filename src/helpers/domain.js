@@ -110,15 +110,26 @@ export default {
     if (!categories) {
       return undefined;
     }
-    const stringArray = Collection.containsStrings(categories) ?
-     Data.getStringsFromCategories(props, axis) : [];
-    const stringMap = stringArray.length === 0 ? null :
-      stringArray.reduce((memo, string, index) => {
-        memo[string] = index + 1;
-        return memo;
-      }, {});
-    const categoryValues = stringMap ?
-      categories.map((value) => stringMap[value]) : categories;
+
+    const stringArray = Collection.containsStrings(categories)
+      ? Data.getStringsFromCategories(props, axis)
+      : [];
+
+    let categoryValues = [];
+
+    if (stringArray.length === 0) {
+      categoryValues = categories;
+    } else {
+      const stringMap = {};
+      for (let index = 0, len = stringArray.length; index < len; index++) {
+        stringMap[stringArray[index]] = index + 1;
+      }
+
+      for (const key in stringMap) {
+        categoryValues.push(stringMap[key]);
+      }
+    }
+
     return [Math.min(...categoryValues), Math.max(...categoryValues)];
   },
 
