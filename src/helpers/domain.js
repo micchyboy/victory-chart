@@ -133,6 +133,27 @@ export default {
     return [Math.min(...categoryValues), Math.max(...categoryValues)];
   },
 
+  mapAndAccumulate(nestedArray, predicate = (() => true)) {
+    const accumulatedArray = [];
+
+    for (let i = 0, iLen = nestedArray.length; i < iLen; i++) {
+      let accumulator = 0;
+      const innerArray = nestedArray[i];
+
+      for (let j = 0, jLen = innerArray.length; j < jLen; j++) {
+        const val = innerArray[j];
+
+        if (predicate(val)) {
+          accumulator += val;
+        }
+      }
+
+      accumulatedArray.push(accumulator);
+    }
+
+    return accumulatedArray;
+  },
+
   getDomainFromGroupedData(props, axis, datasets) {
     const { horizontal } = props;
     const dependent = (axis === "x" && !horizontal) || (axis === "y" && horizontal);
@@ -145,16 +166,8 @@ export default {
     const cumulativeData = !dependent ?
       this.getCumulativeData(props, axis, datasets) : [];
 
-    const cumulativeMaxArray = cumulativeData.map((dataset) => {
-      return dataset.reduce((memo, val) => {
-        return val > 0 ? memo + val : memo;
-      }, 0);
-    });
-    const cumulativeMinArray = cumulativeData.map((dataset) => {
-      return dataset.reduce((memo, val) => {
-        return val < 0 ? memo + val : memo;
-      }, 0);
-    });
+    const cumulativeMaxArray = this.mapAndAccumulate(cumulativeData, (val) => (val > 0));
+    const cumulativeMinArray = this.mapAndAccumulate(cumulativeData, (val) => (val < 0));
 
     const cumulativeMin = Math.min(...cumulativeMinArray);
     // use greatest min / max
