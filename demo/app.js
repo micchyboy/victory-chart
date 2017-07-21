@@ -104,6 +104,7 @@ class App extends React.Component {
           <li><a href="#/selection-container">Victory Selection Container Demo</a></li>
           <li><a href="#/create-container">createContainer Demo</a></li>
           <li><a href="#/polar">Polar Demo</a></li>
+          <li><a href="#/debug">Debug Demo</a></li>
         </ul>
         <Child/>
       </div>
@@ -112,5 +113,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App/>, document.getElementById("content"));
-
-
