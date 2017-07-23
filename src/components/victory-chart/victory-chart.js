@@ -12,7 +12,7 @@ import Wrapper from "../../helpers/wrapper";
 import { BaseProps } from "../../helpers/common-props";
 
 const fallbackProps = {
-  width: 450,
+  width: 2000,
   height: 300,
   padding: 50
 };
